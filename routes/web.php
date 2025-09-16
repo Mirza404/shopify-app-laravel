@@ -2,10 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
-Route::get('/', function () {
+Route::get('/', function (Request $request) {  // Inject Request
+    \Log::info('Shopify Request Params: ' . json_encode($request->query()));
+    \Log::info('Full Request: ' . json_encode($request->all()));
     return Inertia::render('welcome');
-})->name('home');
+})->middleware('verify.shopify')->name('home');
+// ->middleware('verify.shopify')
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
